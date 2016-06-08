@@ -1,0 +1,27 @@
+apply plugin: 'groovy'
+apply plugin: 'maven-publish'
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    compile gradleApi()
+    compile 'com.google.guava:guava:19.0'
+    compile 'com.spotify:docker-client:5.0.1'
+    compile 'org.slf4j:slf4j-api:1.7.21'
+    compile 'org.codehaus.groovy:groovy:2.4.6'
+    testCompile 'junit:junit:4.12'
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId 'com.github.mattcarrier'
+            artifactId 'docker4gradle'
+            version '1.0.0-SNAPSHOT'
+
+            from components.java
+        }
+    }
+}
