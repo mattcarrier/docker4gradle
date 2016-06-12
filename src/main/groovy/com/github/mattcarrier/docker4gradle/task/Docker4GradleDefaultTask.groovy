@@ -13,29 +13,30 @@ import com.spotify.docker.client.messages.ContainerConfig
 import com.spotify.docker.client.messages.Image
 
 class Docker4GradleDefaultTask extends DefaultTask {
-    protected Docker4GradleDefaultTask() {
-        logging.captureStandardOutput(LogLevel.QUIET)
-    }
+	protected Docker4GradleDefaultTask() {
+		logging.captureStandardOutput(LogLevel.QUIET)
+	}
 
-    protected Docker4GradleExtensions getDocker4GradleExtensions() {
-        project.extensions.docker
-    }
+	protected Docker4GradleExtensions getDocker4GradleExtensions() {
+		project.extensions.docker
+	}
 
-    protected DockerClient getDockerClient() {
-        getDocker4GradleExtensions().client
-    }
+	protected DockerClient getDockerClient() {
+		getDocker4GradleExtensions().client
+	}
 
-    protected Image getImage(ImageConfiguration imageConfiguration) {
-        Image image = getImageMap().get(imageConfiguration.image)
-        if (!image) {
-            getDockerClient().pull(imageConfiguration.image, new AnsiProgressHandler())
-            getDocker4GradleExtensions().refreshImageMap()
-        }
+	protected Image getImage(ImageConfiguration imageConfiguration) {
+		final String repoTag = imageConfiguration.image.contains(":") ?: imageConfiguration.image + ":latest"
+		Image image = project.extensions.docker.imageByNameMap.get(repoTag)
+		if (!image) {
+			getDockerClient().pull(imageConfiguration.image, new AnsiProgressHandler())
+			getDocker4GradleExtensions().refreshImageMaps()
+		}
 
-        getImageMap().get(imageConfiguration.image)
-    }
+		project.extensions.docker.imageByNameMap.get(repoTag)
+	}
 
-    protected ContainerConfig buildContainerConfig(Image image, ImageConfiguration imageConfiguration) {
-        ContainerConfig.builder().env(imageConfiguration.env).image(image.id()).build()
-    }
+	protected ContainerConfig buildContainerConfig(Image image, ImageConfiguration imageConfiguration) {
+		ContainerConfig.builder().env(imageConfiguration.env).image(image.id()).build()
+	}
 }

@@ -1,0 +1,19 @@
+buildscript {
+	repositories {
+		jcenter()
+		mavenLocal()
+	}
+	
+	dependencies {
+		classpath 'com.github.mattcarrier:docker4gradle:1.0.0-SNAPSHOT'
+	}
+}
+apply plugin: 'com.github.mattcarrier.docker4gradle'
+
+docker {
+	images {
+		zookeeper {
+			image = "wurstmeister/zookeeper"
+		}
+	}
+}

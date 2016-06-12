@@ -10,40 +10,49 @@ import com.spotify.docker.client.messages.Container;
 import com.spotify.docker.client.messages.Image
 
 class Docker4GradleExtensions {
-    final DockerClient client
-    private volatile ImmutableMap<String, Image> imageByNameMap
-    private volatile ImmutableMap<String, Image> imageByIdMap
-    private volatile ImmutableMap<String, Container> containerMap
+	final DockerClient client
+	private volatile ImmutableMap<String, Image> imageByNameMap
+	private volatile ImmutableMap<String, Image> imageByIdMap
+	private volatile ImmutableMap<String, Container> containerMap
 
-    Docker4GradleExtensions() {
-        client = DefaultDockerClient.fromEnv().build()
-    }
+	Docker4GradleExtensions() {
+		client = DefaultDockerClient.fromEnv().build()
+	}
 
-    ImmutableMap<String, Image> getImageMap() {
-        if (null == imageMap) {
-            refreshImageMap()
-        }
+	ImmutableMap<String, Image> getImageByNameMap() {
+		if (!imageByNameMap) {
+			refreshImageMaps()
+		}
 
-        imageMap
-    }
+		imageByNameMap
+	}
 
-    void refreshImageMap() {
-        imageMap = ImmutableMap.copyOf(client.listImages().parallelStream().collect(Collectors.toMap ({ image ->
-            image.repoTags().get(0)
-        }, { image -> image } )))
-    }
+	ImmutableMap<String, Image> getImageByIdMap() {
+		if (!imageByIdMap) {
+			refreshImageMaps()
+		}
 
-    ImmutableMap<String, Container> getContainerMap() {
-        if (null == containerMap) {
-            refreshContainerMap()
-        }
+		imageByIdMap
+	}
 
-        containerMap
-    }
+	void refreshImageMaps() {
+		imageByNameMap = ImmutableMap.copyOf(client.listImages().parallelStream().collect(Collectors.toMap ({ image ->
+			image.repoTags().get(0)
+		}, { image -> image } )))
+		imageByIdMap = ImmutableMap.copyOf(imageByNameMap.values().parallelStream().collect(Collectors.toMap ({ image ->
+			image.id()
+		}, { image -> image } )))
+	}
 
-    void refreshContainerMap() {
-        containerMap = ImmutableMap.copyOf(client.listContainers().parallelStream().collect(Collectors.toMap ({ container ->
-            container.get
-        }, { container -> container } )))
-    }
+	ImmutableMap<String, Container> getContainerMap() {
+		if (null == containerMap) {
+			refreshContainerMap()
+		}
+
+		containerMap
+	}
+
+	void refreshContainerMap() {
+		containerMap = ImmutableMap.copyOf(client.listContainers().parallelStream().collect(Collectors.toMap ({ container -> container.get }, { container -> container } )))
+	}
 }
