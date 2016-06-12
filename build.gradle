@@ -5,11 +5,8 @@ repositories { jcenter() }
 
 dependencies {
 	compile gradleApi()
-	compile 'com.google.guava:guava:19.0'
-	compile 'com.spotify:docker-client:5.0.1'
-	compile 'org.slf4j:slf4j-api:1.7.21'
+	compile 'com.spotify:docker-client:5.0.2:shaded'
 	compile 'org.codehaus.groovy:groovy:2.4.6'
-	testCompile 'org.reflections:reflections:0.9.10'
 	testCompile 'junit:junit:4.12'
 }
 

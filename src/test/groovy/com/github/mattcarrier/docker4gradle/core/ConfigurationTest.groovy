@@ -1,31 +1,27 @@
 package com.github.mattcarrier.docker4gradle.core
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.*
 
 import java.nio.file.Files
-import java.nio.file.Paths;
-import java.util.stream.Collectors;
+import java.nio.file.Paths
 
 import org.gradle.api.Project
 import org.gradle.tooling.BuildLauncher
 import org.gradle.tooling.GradleConnector
 import org.gradle.tooling.ProjectConnection
-import org.junit.After;
-import org.junit.Before
+import org.junit.After
 import org.junit.BeforeClass
-import org.junit.ClassRule;
-import org.junit.Rule
+import org.junit.ClassRule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
 
-import com.google.common.collect.Lists;
+import com.google.common.collect.Lists
 import com.spotify.docker.client.DefaultDockerClient
 import com.spotify.docker.client.DockerClient
-import com.spotify.docker.client.DockerClient.ListContainersFilterParam;
 import com.spotify.docker.client.DockerClient.ListContainersParam
 import com.spotify.docker.client.DockerClient.ListImagesParam
 import com.spotify.docker.client.messages.Container
-import com.spotify.docker.client.messages.Image;;
+import com.spotify.docker.client.messages.Image
 
 class ConfigurationTest {
 	private static DockerClient client;
