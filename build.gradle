@@ -8,6 +8,7 @@ dependencies {
 	compile 'com.spotify:docker-client:5.0.2:shaded'
 	compile 'org.codehaus.groovy:groovy:2.4.6'
 	testCompile 'junit:junit:4.12'
+	testRuntime 'com.google.guava:guava:18.0'
 }
 
 publishing {
