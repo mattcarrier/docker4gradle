@@ -7,3 +7,6 @@ jdk:
 
 services:
   - docker
+
+os:
+  - osx
