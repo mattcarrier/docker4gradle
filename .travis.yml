@@ -1,3 +1,9 @@
+sudo: required
+
 language: groovy
+
 jdk:
   - oraclejdk8
+
+services:
+  - docker
