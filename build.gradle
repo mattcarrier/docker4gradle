@@ -1,14 +1,35 @@
 apply plugin: 'groovy'
 apply plugin: 'maven-publish'
 
+configurations {
+	itestCompile.extendsFrom testCompile
+	itestRuntime.extendsFrom testRuntime
+}
+
+sourceSets {
+	itest {
+		compileClasspath += main.output + test.output
+		runtimeClasspath += main.output + test.output
+		runtimeClasspath += files('src/itest/resources')
+
+		java.srcDir file('src/itest/java')
+	}
+
+	// This is just to trick IntelliJ IDEA to add integration test
+	// resources to classpath when running integration tests from
+	// the IDE. It's is not a good solution but I don't know about
+	// a better one.
+	test {
+		resources.srcDir file('src/itest/resources')
+	}
+}
+
 repositories { jcenter() }
 
 dependencies {
 	compile gradleApi()
 	compile 'com.spotify:docker-client:5.0.2:shaded'
-	compile 'org.codehaus.groovy:groovy:2.4.6'
 	testCompile 'junit:junit:4.12'
-	testRuntime 'com.google.guava:guava:18.0'
 }
 
 publishing {
@@ -21,4 +42,12 @@ publishing {
 			from components.java
 		}
 	}
+}
+
+task itest(type: Test) {
+	testClassesDir = sourceSets.itest.output.classesDir
+	classpath = sourceSets.itest.runtimeClasspath
+
+	// This is not needed, but I like to see which tests have run
+	testLogging { events "passed", "skipped", "failed" }
 }
