@@ -7,4 +7,4 @@ services:
   - docker
 
 script:
-  - ./gradlew publishToMavenLocal itest
+  - ./gradlew publishToMavenLocal itest --info
