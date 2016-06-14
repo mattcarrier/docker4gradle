@@ -1,6 +1,5 @@
 buildscript {
 	repositories {
-		jcenter()
 		mavenLocal()
 	}
 	
@@ -9,6 +8,10 @@ buildscript {
 	}
 }
 apply plugin: 'com.github.mattcarrier.docker4gradle'
+
+repositories {
+	jcenter()
+}
 
 docker {
 	images {
